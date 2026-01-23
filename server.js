@@ -12,7 +12,8 @@ dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 
-connectDB();
+//Db Connection
+await connectDB();
 
 // Swagger configuration
 const swaggerOptions = {
