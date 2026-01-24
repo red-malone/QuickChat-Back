@@ -33,10 +33,10 @@ export const loginUser =async(req,res)=>{
   try{
       const {email,password}=req.body;
       //Check if user exists
-      const user=await user.findOne({email});
-      if(!user){
-          return res.status(400).json({message:"Invalid email or password"});
-      }
+      const user=await User.findOne({email});
+      // if(!user){
+      //     return res.status(400).json({message:"Invalid email or password"});
+      // }
       //Check password
       const isMatch=await bcrypt.compare(password,user.password);
       if(!isMatch){
@@ -45,7 +45,24 @@ export const loginUser =async(req,res)=>{
       const token=generateToken(user._id);
       return res.status(200).json({message:"Login successful",token});
   }catch(e){
-    console.error("usercontroller.js: Error in loginUser:", e);
+    console.error("usercontroller.js: Error in loginUser:", e.message);
     return res.status(500).json({ message: "Server error" });
   }
+}
+
+//Check if user is authenticated
+export const checkAuth=(req,res)=>{
+    res.json({message:"User is authenticated", user:req.user});
+}
+
+//Controller to update user profile details
+export const updateUserProfile=async(req,res)=>{
+    try{
+      const {profilePic,bio,fullName}=req.body
+      let updatedUser;
+      
+    }catch(e){
+        console.error("usercontroller.js: Error in updateUserProfile:", e.message);
+        return res.status(500).json({ message: "Server error" });
+    }
 }
