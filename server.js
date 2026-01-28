@@ -7,7 +7,7 @@ import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import dotenv from "dotenv";
 import connectDB from "./lib/db.js";
-
+import userRouter from "./routes/userROutes.js";
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
@@ -29,6 +29,15 @@ const swaggerOptions = {
         url: `http://localhost:${PORT}`,
       },
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
   },
   apis: ["./routes/*.js"],
 };
@@ -53,6 +62,9 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerDocs, { explorer: true }),
 );
+
+// Mount application routes
+app.use("/api/users", userRouter);
 
 //Invalid Route Handler
 app.use((req, res, next) => {
