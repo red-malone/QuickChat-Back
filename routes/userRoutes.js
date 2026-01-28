@@ -11,7 +11,7 @@ import { protect } from "../middleware/auth.js";
 const userRouter=express.Router()
 /**
  * @swagger
- * /api/users/signup:
+ * /users/signup:
  *   post:
  *     tags:
  *       - Users
@@ -37,7 +37,7 @@ userRouter.post("/signup", signupUser);
 
 /**
  * @swagger
- * /api/users/login:
+ * /users/login:
  *   post:
  *     tags:
  *       - Users
@@ -61,7 +61,7 @@ userRouter.post("/login", loginUser);
 
 /**
  * @swagger
- * /api/users/profile:
+ * /users/profile:
  *   put:
  *     tags:
  *       - Users
@@ -89,7 +89,7 @@ userRouter.put("/profile", protect, updateUserProfile);
 
 /**
  * @swagger
- * /api/users/check-auth:
+ * /users/check-auth:
  *   get:
  *     tags:
  *       - Users

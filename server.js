@@ -8,6 +8,7 @@ import swaggerUi from "swagger-ui-express";
 import dotenv from "dotenv";
 import connectDB from "./lib/db.js";
 import userRouter from "./routes/userROutes.js";
+import messageRouter from "./routes/messageRoutes.js";
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
@@ -53,7 +54,7 @@ app.use(morgan("dev"));
 app.use(helmet());
 
 //Health Status
-app.use("/api/status", (req, res) => {
+app.use("/status", (req, res) => {
   res.send({ status: "OK", message: "Server is running" });
 });
 // Swagger UI setup
@@ -64,7 +65,8 @@ app.use(
 );
 
 // Mount application routes
-app.use("/api/users", userRouter);
+app.use("/users", userRouter);
+app.use("/message", messageRouter);
 
 //Invalid Route Handler
 app.use((req, res, next) => {

@@ -9,7 +9,7 @@ export const signupUser = async (req, res) => {
     //Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ success: false, message: "User already exists" });
     }
     //Hash password
     const salt = await bcrypt.genSalt(10);
@@ -23,7 +23,7 @@ export const signupUser = async (req, res) => {
     await newUser.save();
     console.log("usercontroller.js: User created successfully", newUser);
     const token = generateToken(newUser._id);
-    return res.status(201).json({ message: "User created successfully" , token});
+    return res.status(201).json({ success: true, message: "User created successfully" , token});
   } catch (error) {
     console.error("usercontroller.js: Error in signupUser:", error);
     return res.status(500).json({ message: "Server error" });
@@ -41,10 +41,10 @@ export const loginUser =async(req,res)=>{
       //Check password
       const isMatch=await bcrypt.compare(password,user.password);
       if(!isMatch){
-          return res.status(400).json({message:"Invalid email or password"});
+          return res.status(400).json({success:false,message:"Invalid email or password"});
       }
       const token=generateToken(user._id);
-      return res.status(200).json({message:"Login successful",token});
+      return res.status(200).json({success:true,message:"Login successful",token});
   }catch(e){
     console.error("usercontroller.js: Error in loginUser:", e.message);
     return res.status(500).json({ message: "Server error" });
@@ -70,7 +70,7 @@ export const updateUserProfile=async(req,res)=>{
         const upload =await cloudinary.uploader.upload(profilePic)
         updatedUser= await User.findByIdAndUpdate(userId, {profilePic:upload.secure_url, fullName, bio },{new:true})
       }
-      res.json({message:"Profile updated successfully",user:updatedUser});
+      res.json({success:true,message:"Profile updated successfully",user:updatedUser});
     }catch(e){
         console.error("usercontroller.js: Error in updateUserProfile:", e.message);
         return res.status(500).json({ message: "Server error" });
