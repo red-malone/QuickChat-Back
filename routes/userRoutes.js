@@ -4,9 +4,8 @@ import { protect } from "../middleware/auth.js";
 /**
  * @swagger
  * tags:
- *   name: Users
- *   description: User management and authentication
- * 
+ *   - name: Users
+ *     description: User management and authentication
  */
 const userRouter=express.Router()
 /**

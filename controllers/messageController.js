@@ -1,4 +1,3 @@
-import { truncates } from "bcryptjs";
 import Message from "../models/Message.js";
 import User from "../models/User.js";
 
