@@ -1,3 +1,4 @@
+import cloudinary from "../lib/cloudinary.js";
 import Message from "../models/Message.js";
 import User from "../models/User.js";
 
@@ -76,6 +77,31 @@ export const markMessageAsSeen=async(req,res)=>{
         return res.status(200).json({success:true,message:"Message marked as seen"});
     }catch(e){
         console.error("messageController.js: Error in markMessageAsSeen:", e.message);
+        return res.status(500).json({ message: "Server error" });
+    }
+}
+
+
+//api to send a message (text/image)
+export  const sendMessage=async(req,res)=>{
+    try{
+        const {text,image}=req.body
+        const senderId=req.user._id;
+        const receiverId=req.params.userId;
+        let imageUrl;
+        if(image){
+            const upload =await cloudinary.uploader.upload(image)
+            imageUrl=upload.secure_url;
+        }
+        const newMessage=new Message({
+            senderId,
+            receiverId,
+            text,
+            image:imageUrl
+        })
+        //emit the message to reciever 
+    }catch(e){
+        console.error("messageController.js: Error in sendMessage:", e.message);
         return res.status(500).json({ message: "Server error" });
     }
 }

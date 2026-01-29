@@ -9,6 +9,7 @@ import dotenv from "dotenv";
 import connectDB from "./lib/db.js";
 import userRouter from "./routes/userROutes.js";
 import messageRouter from "./routes/messageRoutes.js";
+import { initializeSocket } from "./lib/socketHandler.js";
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
@@ -46,6 +47,9 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 const app = express();
 const server = http.createServer(app);
+
+//Socket.io setup
+export const io = initializeSocket(server);
 
 //Middleware
 app.use(express.json({ limit: "4mb" }));
