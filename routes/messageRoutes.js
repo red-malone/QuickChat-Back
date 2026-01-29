@@ -3,6 +3,7 @@ import {
   getUsers,
   getMessages,
   markMessageAsSeen,
+  sendMessage
 } from "../controllers/messageController.js";
 import { protect } from "../middleware/auth.js";
 /**
@@ -73,4 +74,24 @@ messageRouter.get("/messages/:userId", protect, getMessages);
 
 messageRouter.put("/messages/seen/:messageId", protect, markMessageAsSeen);
 
+/**
+ * @swagger
+ * /message/send/{id}:
+ *   post:
+ *     tags:
+ *       - Messages
+ *     summary: Send a message
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Message sent successfully
+ */
+messageRouter.post("/send/:id", protect, sendMessage);
 export default messageRouter;

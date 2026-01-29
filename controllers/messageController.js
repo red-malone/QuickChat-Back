@@ -1,6 +1,8 @@
 import cloudinary from "../lib/cloudinary.js";
 import Message from "../models/Message.js";
 import User from "../models/User.js";
+import { io } from "../server.js";
+import { userSocketMap } from "../lib/socketHandler.js";
 
 //Get all users except the authenticated user
 
@@ -100,6 +102,12 @@ export  const sendMessage=async(req,res)=>{
             image:imageUrl
         })
         //emit the message to reciever 
+        const receiverSocketId=userSocketMap[receiverId];
+        if(receiverSocketId){
+            io.to(receiverSocketId).emit("message",newMessage);
+        }
+        res.json({success:true,message:"Message sent successfully",newMessage});
+
     }catch(e){
         console.error("messageController.js: Error in sendMessage:", e.message);
         return res.status(500).json({ message: "Server error" });
