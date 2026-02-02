@@ -6,8 +6,10 @@ import cloudinary from "../lib/cloudinary.js";
 export const signupUser = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
+    // Normalize email
+    const normalizedEmail = String(email || '').toLowerCase().trim();
     //Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
       return res.status(400).json({ success: false, message: "User already exists" });
     }
@@ -17,7 +19,7 @@ export const signupUser = async (req, res) => {
     //Create new user
     const newUser = new User({
       fullName,
-      email,
+      email: normalizedEmail,
       password: hashedPassword
     });
     await newUser.save();
@@ -33,8 +35,10 @@ export const signupUser = async (req, res) => {
 export const loginUser =async(req,res)=>{
   try{
       const {email,password}=req.body;
+      //Normalize email to avoid case/whitespace mismatches
+      const normalizedEmail = String(email || '').toLowerCase().trim();
       //Check if user exists
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ email: normalizedEmail });
       if (!user) {
           return res.status(400).json({ success: false, message: "Invalid email or password" });
       }
