@@ -89,18 +89,21 @@ export  const sendMessage=async(req,res)=>{
     try{
         const {text,image}=req.body
         const senderId=req.user._id;
-        const receiverId=req.params.userId;
+        const receiverId=req.params.id;
+        console.log("messageController.js: sendMessage called with senderId:", senderId, "receiverId:", receiverId, "text:", text, "image:", !!image);
         let imageUrl;
         if(image){
             const upload =await cloudinary.uploader.upload(image)
             imageUrl=upload.secure_url;
         }
-        const newMessage=new Message({
+   const newMessage=new Message({
             senderId,
             receiverId,
             text,
             image:imageUrl
         })
+        
+        await newMessage.save();
         //emit the message to reciever 
         const receiverSocketId=userSocketMap[receiverId];
         if(receiverSocketId){
